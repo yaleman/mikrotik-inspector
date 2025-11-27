@@ -1,0 +1,23 @@
+[project]
+name = "mikrotik-inspector"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.3.1",
+    "fabric>=3.2.2",
+    "pydantic>=2.12.5",
+    "pydantic-settings>=2.12.0",
+]
+
+[project.scripts]
+mikrotik-inspector = "mikrotik_inspector.__main__:main"
+mikrotik-dhcp-leases = "mikrotik_inspector.dhcp_leases:main"
+
+[dependency-groups]
+dev = ["coveralls>=4.0.2", "mypy>=1.18.2", "pytest>=9.0.1", "ruff>=0.14.6"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

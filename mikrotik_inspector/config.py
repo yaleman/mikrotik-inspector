@@ -40,7 +40,7 @@ def configure_logging(debug: bool = False) -> logging.Logger:
     default_fmt = logging.Formatter("%(message)s")
     stdout_handler = logging.StreamHandler(sys.stdout)
     stdout_handler.setLevel(logging.INFO)
-    stdout_handler.addFilter(_LevelFilter(allow_only=logging.INFO))
+    stdout_handler.addFilter(_LevelFilter(allow_over=logging.INFO))
     stdout_handler.setFormatter(default_fmt)
     root.addHandler(stdout_handler)
 

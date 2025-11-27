@@ -17,31 +17,47 @@ from mikrotik_inspector import connect, parse_response
 )
 @click.option("--debug", is_flag=True, help="Enable debug mode.")
 @click.argument("command")
+def cli(
+    command: str,
+    host: Optional[str] = None,
+    user: Optional[str] = None,
+    debug: bool = False,
+) -> None:
+    return main(command, host=host, user=user, debug=debug)
+
+
 def main(
     command: str,
     host: Optional[str] = None,
     user: Optional[str] = None,
     debug: bool = False,
 ) -> None:
-    logger = configure_logging(debug=debug)
+    try:
+        logger = configure_logging(debug=debug)
 
-    settings = Settings()  # type: ignore[call-arg]
+        settings = Settings()  # type: ignore[call-arg]
 
-    username = user or settings.user
-    hostname = host or settings.hostname
+        username = user or settings.user
+        hostname = host or settings.hostname
 
-    if not hostname or hostname is None:
-        raise ValueError("Hostname must be provided either via --host or settings.")
+        if not hostname or hostname is None:
+            raise ValueError("Hostname must be provided either via --host or settings.")
+        try:
+            client = connect(hostname, username)
+            result = client.run(command, hide=True)
+        except Exception as error:
+            logger.error(f"Failed to connect to {hostname} as {username}: {error}")
+            return
+        for element in parse_response(result.stdout, logger):
+            for key in element.keys():
+                if element[key] is None:
+                    del element[key]
 
-    client = connect(hostname, username)
-    result = client.run(command, hide=True)
-    for element in parse_response(result.stdout, logger):
-        for key in element.keys():
-            if element[key] is None:
-                del element[key]
-
-        print(json.dumps(element))
-    client.close()
+            print(json.dumps(element))
+    except BrokenPipeError:
+        pass
+    finally:
+        client.close()
 
 
 if __name__ == "__main__":

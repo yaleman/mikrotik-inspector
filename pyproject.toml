@@ -8,7 +8,7 @@ dependencies = [
     "click>=8.3.1",
     "fabric>=3.2.2",
     "pydantic>=2.12.5",
-    "pydantic-settings>=2.12.0",
+    "pydantic-settings>=2.14.2",
 ]
 
 [project.scripts]

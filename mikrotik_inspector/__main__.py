@@ -1,9 +1,9 @@
 import json
-from typing import Optional
 
 import click
-from mikrotik_inspector.config import Settings, configure_logging
+
 from mikrotik_inspector import connect, parse_response
+from mikrotik_inspector.config import Settings, configure_logging
 
 
 @click.command()
@@ -19,8 +19,8 @@ from mikrotik_inspector import connect, parse_response
 @click.argument("command")
 def cli(
     command: str,
-    host: Optional[str] = None,
-    user: Optional[str] = None,
+    host: str | None = None,
+    user: str | None = None,
     debug: bool = False,
 ) -> None:
     return main(command, host=host, user=user, debug=debug)
@@ -28,8 +28,8 @@ def cli(
 
 def main(
     command: str,
-    host: Optional[str] = None,
-    user: Optional[str] = None,
+    host: str | None = None,
+    user: str | None = None,
     debug: bool = False,
 ) -> None:
     try:
@@ -45,12 +45,12 @@ def main(
         try:
             client = connect(hostname, username)
             result = client.run(command, hide=True)
-        except Exception as error:
+        except Exception as error:  # noqa: BLE001
             logger.error(f"Failed to connect to {hostname} as {username}: {error}")
             return
         for element in parse_response(result.stdout, logger):
-            for key in element.keys():
-                if element[key] is None:
+            for key in element:
+                if element.get(key) is None:
                     del element[key]
 
             print(json.dumps(element))
@@ -61,4 +61,4 @@ def main(
 
 
 if __name__ == "__main__":
-    main()
+    main()  # ty: ignore[missing-argument]

@@ -3,8 +3,7 @@ from datetime import timedelta
 
 import pytest
 
-from mikrotik_inspector import parse_dhcp_response, LeaseInfo, parse_duration
-
+from mikrotik_inspector import LeaseInfo, parse_dhcp_response, parse_duration
 
 EXAMPLE = """Flags: X - disabled, R - radius, D - dynamic, B - blocked
 65 D address=10.0.5.146 mac-address=BC:DD:C2:29:73:B7 address-lists=""

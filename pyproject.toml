@@ -16,7 +16,13 @@ mikrotik-inspector = "mikrotik_inspector.__main__:cli"
 mikrotik-dhcp-leases = "mikrotik_inspector.dhcp_leases:cli"
 
 [dependency-groups]
-dev = ["coveralls>=4.0.2", "mypy>=1.18.2", "pytest>=9.0.3", "ruff>=0.14.6"]
+dev = [
+    "coveralls>=4.0.2",
+    "mypy>=1.18.2",
+    "pytest>=9.0.3",
+    "ruff>=0.14.6",
+    "ty>=0.0.70",
+]
 
 [build-system]
 requires = ["hatchling"]

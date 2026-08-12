@@ -1,16 +1,13 @@
-import os
-from typing import Optional
-
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import Field
 import logging
+import os
 import sys
+
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigdict
 
 
 class _LevelFilter(logging.Filter):
-    def __init__(
-        self, *, allow_over: Optional[int] = None, allow_only: Optional[int] = None
-    ):
+    def __init__(self, *, allow_over: int | None = None, allow_only: int | None = None):
         super().__init__()
         self.allow_over = allow_over
         self.allow_only = allow_only
@@ -61,7 +58,7 @@ def configure_logging(debug: bool = False) -> logging.Logger:
 
 
 class Settings(BaseSettings):
-    hostname: Optional[str] = Field(None)
-    user: Optional[str] = Field(os.getenv("USER"))
+    hostname: str | None = Field(None)
+    user: str | None = Field(os.getenv("USER"))
 
-    model_config = SettingsConfigDict(env_prefix="MIKROTIK_")
+    model_config = SettingsConfigdict(env_prefix="MIKROTIK_")
